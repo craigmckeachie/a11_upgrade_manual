@@ -18,8 +18,20 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
 
 ## Step 0: The AngularJS Project
 
-1. Open a command prompt or terminal to `code\labs\UpgradeAngularJStoAngular\angular-phonecat\app`
-2. Run the commands:
+1. Open this directory in your Windows Explorer or Mac Finder `code\labs\UpgradeAngularJStoAngular`
+
+- Delete these subdirectories
+  - step-2-create-folders-for-each-framework
+  - step-3-copy-angularjs-project
+  - step-4-bootstrap-hybrid-app
+  - step-5-downgrade-angular-component
+  - step-6-upgrade-angularjs-service
+  - step-7-routing-using-angularjs-router
+  - step-8-angularjs-views-in-root-component
+  - step-9-sibling-routers
+
+2. Open a command prompt or terminal to `code\labs\UpgradeAngularJStoAngular\angular-phonecat\app`
+3. Run the commands:
 
 ```bash
 npm install serve -g
