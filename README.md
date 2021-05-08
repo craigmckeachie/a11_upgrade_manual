@@ -3,17 +3,18 @@
 This tutorial walks you through upgrading the `Phonecat` app written in AngularJS to Angular using the Angular CLI.
 
 - [Upgrading](#upgrading)
-  - [Step 0: The AngularJS Project](#step-0-the-angularjs-project)
-  - [Step 1: Generate New Angular Project](#step-1-generate-new-angular-project)
-  - [Step 2: Create Angular and AngularJS folders](#step-2-create-angular-and-angularjs-folders)
-  - [Step 3: Copy AngularJS project](#step-3-copy-angularjs-project)
-  - [Step 5: Downgrading An Angular Component](#step-5-downgrading-an-angular-component)
-  - [Step 6: Upgrading an AngularJS Service](#step-6-upgrading-an-angularjs-service)
-  - [Step 7: Routing to Angular Components (using the AngularJS Router)](#step-7-routing-to-angular-components-using-the-angularjs-router)
-  - [Step 8: AngularJS Views inside the Root Angular Component](#step-8-angularjs-views-inside-the-root-angular-component)
-  - [Step 9: Sibling Routers](#step-9-sibling-routers)
+  - [Lab 0: The AngularJS Project](#lab-0-the-angularjs-project)
+  - [Lab 1: Generate New Angular Project](#lab-1-generate-new-angular-project)
+  - [Lab 2: Create Angular and AngularJS folders](#lab-2-create-angular-and-angularjs-folders)
+  - [Lab 3: Copy AngularJS project](#lab-3-copy-angularjs-project)
+  - [Lab 4: Bootstrap AngularJS & Angular Hybrid Application](#lab-4-bootstrap-angularjs--angular-hybrid-application)
+  - [Lab 5: Downgrading An Angular Component](#lab-5-downgrading-an-angular-component)
+  - [Lab 6: Upgrading an AngularJS Service](#lab-6-upgrading-an-angularjs-service)
+  - [Lab 7: Routing to Angular Components (using the AngularJS Router)](#lab-7-routing-to-angular-components-using-the-angularjs-router)
+  - [Lab 8: AngularJS Views inside the Root Angular Component](#lab-8-angularjs-views-inside-the-root-angular-component)
+  - [Lab 9: Sibling Routers](#lab-9-sibling-routers)
 
-## Step 0: The AngularJS Project
+## Lab 0: The AngularJS Project
 
 1. Create an `working` directory on your computer for these labs.
 
@@ -50,7 +51,8 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
 
 7. Shut down the web server Ctrl+C.
 
-## Step 1: Generate New Angular Project
+
+## Lab 1: Generate New Angular Project
 
 1. Open a command-prompt or terminal in the `working` directory.
 1. Run the command
@@ -72,8 +74,9 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
    ```
 
    A browser should display the `angular-cli` generated application.
+1. Optional: Initialize a git repository and commit this initial code so you can track your progress.
 
-## Step 2: Create Angular and AngularJS folders
+## Lab 2: Create Angular and AngularJS folders
 
 1. Open the directory `working\upgrading` in your editor
 
@@ -86,7 +89,8 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
    - index.html
 1. Copy the `upgrading\tsconfig.json` into the `upgrading\src` directory
 
-## Step 3: Copy AngularJS project
+1. Optional: Commit your code to source control.
+## Lab 3: Copy AngularJS project
 
 > Note that there is already a `bower_components` folder in `angular-phonecat\app` repository we cloned. If you were to download your own copy of angular-phonecat you would need to first run `npm install` to create this folder.
 
@@ -330,9 +334,10 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
 
     _As those two applications are bootstrapped separately, they are not able to communicate with each other or to exchange services and components. To make this work, we have to bootstrap them together as a hybrid application. The next section show how to do this._
 
-      <div style="page-break-after: always;"></div>
+   
 
-    ## Step 4: Bootstrap AngularJS & Angular Hybrid Application
+1. Optional: Commit your code to source control.
+## Lab 4: Bootstrap AngularJS & Angular Hybrid Application
 
     1.  To bootstrap one application with both AngularJS and Angular we can leverage `ngUpgrade` which is part of Angular:
 
@@ -342,7 +347,7 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
     npm install @angular/upgrade@11 --save
     ```
 
-1.  In `index.html`
+2.  In `index.html`
 
     We don't want to bootstrap the Angular application on its own at this point, so we will comment out it's root component in `src\index.html`.
 
@@ -350,17 +355,17 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
     <!-- <app-root></app-root> -->
     ```
 
-1.  In `angular\app\app.module.ts` comment out the bootstrap of the `AppComponent`
+3.  In `angular\app\app.module.ts` comment out the bootstrap of the `AppComponent`
 
     ```ts
     // bootstrap: [AppComponent]
     ```
 
-1.  To prevent bootstrapping the AngularJS application remove the `ng-app` directive.
+4.  To prevent bootstrapping the AngularJS application remove the `ng-app` directive.
 
     - Remove: <body ~~ng-app="phonecatApp"~~>
 
-1.  Add the `UpgradeModule` to the list of Angular module imports.
+5.  Add the `UpgradeModule` to the list of Angular module imports.
 
     #### `angular\app\app.module.ts`
 
@@ -390,10 +395,10 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
     }
     ```
 
-1.  The Angular application may need to be restarted to recognize the `UpgradeModule` and bootstrap itself appropriately.
+6.  The Angular application may need to be restarted to recognize the `UpgradeModule` and bootstrap itself appropriately.
     Use Ctrl+C (Windows) or Cmd+C (Mac) to stop the web server.
 
-1.  Run the application.
+7.  Run the application.
 
     ```shell
     ng serve -o
@@ -407,7 +412,9 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
 
     > Note: Even though we only see the AngularJS application it is a hybrid application. To prove this, the next section shows how to use an Angular component within the shown AngularJS component.
 
-## Step 5: Downgrading An Angular Component
+
+1. Optional: Commit your code to source control.
+## Lab 5: Downgrading An Angular Component
 
 1.  Create the widget directory: `src\angular\app\widget`
 2.  Create the file `src\angular\app\widget\widget.component.ts`.
@@ -483,7 +490,10 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
 
     [widget]: readme-assets/widget.png
 
-## Step 6: Upgrading an AngularJS Service
+
+1. Optional: Commit your code to source control.    
+
+## Lab 6: Upgrading an AngularJS Service
 
 In order to use an existing AngularJS service within a new Angular Component, we have to upgrade it.
 
@@ -565,7 +575,7 @@ In order to use an existing AngularJS service within a new Angular Component, we
 
     Instead of nesting AngularJS and Angular stuff, we also need the possibility to activate routes from both versions. We will explore this in the next couple sections.
 
-## Step 7: Routing to Angular Components (using the AngularJS Router)
+## Lab 7: Routing to Angular Components (using the AngularJS Router)
 
 Making the AngularJS Router activate Angular components is quite easy.
 
@@ -606,7 +616,9 @@ Making the AngularJS Router activate Angular components is quite easy.
 
     While this solution is very easy, it also comes with a drawback. We cannot leverage the new Angular Router for the newly written components. We will explore how we can use the Angular Router in the next sections.
 
-## Step 8: AngularJS Views inside the Root Angular Component
+
+1. Optional: Commit your code to source control.
+## Lab 8: AngularJS Views inside the Root Angular Component
 
 1.  In `src\index.html` and the Angular root component (`AppComponent`) and remove the `ng-view` directive.
 
@@ -693,7 +705,9 @@ Making the AngularJS Router activate Angular components is quite easy.
 
     [app-root]: readme-assets/app-root-parent.png
 
-## Step 9: Sibling Routers
+
+1. Optional: Commit your code to source control.
+## Lab 9: Sibling Routers
 
 1.  Add the Angular directive `router-outlet`
 
@@ -847,3 +861,6 @@ Making the AngularJS Router activate Angular components is quite easy.
     [nav]: readme-assets/navigation.png
     [nav-widget]: readme-assets/nav-widget.png
     [nav-phones]: readme-assets/nav-phones.png
+
+
+1. Optional: Commit your code to source control.
