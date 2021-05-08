@@ -69,9 +69,9 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
    ```shell
    ng new upgrading
    ```
-1. Choose `n` no for strict.
-1. Choose `n` no for routing.
-1. Choose `CSS` for styling.
+1. Choose `n` no for stricter type checking and bundle budgets.
+1. Choose `n` no for Angular routing.
+1. Choose `CSS` for stylesheet format by hitting enter.
 
 1. In the command-promt or terminal, change directory to the `working\upgrading` directory.
    ```
