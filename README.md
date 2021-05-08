@@ -298,8 +298,9 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
 
 > Note that there is already a `bower_components` folder in `angular-phonecat\app` repository we cloned. If you were to download your own copy of angular-phonecat you would need to first run `npm install` to create this folder.
 
-1.  Copy **the contents** of `angular-phonecat\app` (including the bower_components subdirectory) into `upgrading\src\angularjs`.
-1.  Merge `upgrading\src\angularjs\index.html` into `upgrading\src\index.html` as shown below:
+1.  Create the directory `upgrading\src\angularjs`
+2.  Copy **the contents** of `angular-phonecat\app` (including the bower_components subdirectory) into `upgrading\src\angularjs`.
+3.  Merge `upgrading\src\angularjs\index.html` into `upgrading\src\index.html` as shown below:
 
     ```diff
     <!doctype html>
@@ -346,21 +347,34 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
     </html>
     ```
 
-1.  When finished with the merge delete `upgrading\src\angularjs\index.html`.
+4.  When finished with the merge delete `upgrading\src\angularjs\index.html`.
 
-1.  Add `src\angularjs` to the list of `assets`
+5.  Add `src\angularjs` to the list of `assets`
+
+    #### `angular.json`
 
     ```diff
-    "architect": {
+    {
+      "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+      "version": 1,
+      "newProjectRoot": "projects",
+      "projects": {
+        "upgrading": {
+          "projectType": "application",
+          "schematics": {},
+          "root": "",
+          "sourceRoot": "src",
+          "prefix": "app",
+          "architect": {
             "build": {
               "builder": "@angular-devkit/build-angular:browser",
               "options": {
-                "aot": true,
                 "outputPath": "dist/upgrading",
                 "index": "src/index.html",
                 "main": "src/angular/main.ts",
                 "polyfills": "src/angular/polyfills.ts",
-                "tsConfig": "src/angular/tsconfig.app.json",
+                "tsConfig": "tsconfig.app.json",
+                "aot": true,
                 "assets": [
                   "src/favicon.ico",
                   "src/angular/assets",
@@ -369,10 +383,11 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
                 "styles": ["src/angular/styles.css"],
                 "scripts": []
               },
-    ...
+
+     ...
     ```
 
-1.  Fix paths throughout the application by appending `angularjs/` to the paths in these files in the `src\angularjs` directory.
+6.  Fix paths throughout the application by appending `angularjs/` to the paths in these files in the `src\angularjs` directory.
 
     - `core\phone\phone.service.js`
       - change ~~`"phones/:phoneId.json",`~~ to `"angularjs/phones/:phoneId.json",`
@@ -387,7 +402,7 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
       - change ~~`{{img}}`~~ to `angularjs/{{img}}`
         _Note there are two instances of `{{img}}` in the template on line 2 and 12._
 
-1.  Stop the application if it is running `Ctrl+C`, then run the application again using the command below.
+7.  Stop the application if it is running `Ctrl+C`, then run the application again using the command below.
 
     ```shell
     ng serve -o
@@ -403,7 +418,7 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
 
     _As those two applications are bootstrapped separately, they are not able to communicate with each other or to exchange services and components. To make this work, we have to bootstrap them together as a hybrid application. The next section show how to do this._
 
-1.  Optional: Commit your code to source control.
+8.  Optional: Commit your code to source control.
 
 ## Lab 4: Bootstrap AngularJS & Angular Hybrid Application
 
