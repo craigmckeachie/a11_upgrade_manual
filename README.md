@@ -5,8 +5,11 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
 - [Upgrading](#upgrading)
   - [Lab 0: The AngularJS Project](#lab-0-the-angularjs-project)
   - [Lab 1: Generate New Angular Project](#lab-1-generate-new-angular-project)
-  - [Lab 2: Create Angular and AngularJS folders](#lab-2-create-angular-and-angularjs-folders)
-  - [Lab 3: Copy AngularJS project](#lab-3-copy-angularjs-project)
+  - [Lab 2: Create Angular directory and configure](#lab-2-create-angular-directory-and-configure)
+    - [`tsconfig.app.json`](#tsconfigappjson)
+    - [`tsconfig.spec.json`](#tsconfigspecjson)
+    - [`angular.json`](#angularjson)
+  - [Lab 3: Create AngularJS directory and configure](#lab-3-create-angularjs-directory-and-configure)
   - [Lab 4: Bootstrap AngularJS & Angular Hybrid Application](#lab-4-bootstrap-angularjs--angular-hybrid-application)
   - [Lab 5: Downgrading An Angular Component](#lab-5-downgrading-an-angular-component)
   - [Lab 6: Upgrading an AngularJS Service](#lab-6-upgrading-an-angularjs-service)
@@ -85,30 +88,217 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
 
    A browser should display the `angular-cli` generated application.
 
-1. Shut down the web server Ctrl+C.   
+1. Shut down the web server Ctrl+C.
 
-1. Optional: Initialize a git repository and commit this initial code so you can track your progress.
-
-## Lab 2: Create Angular and AngularJS folders
+## Lab 2: Create Angular directory and configure
 
 1. Open the directory `working\upgrading` in your editor
 
-1. In `src` folder create two folders `angular` and `angularjs`.
+1. In `src` folder create two folders `src\angular` and `src\angularjs`.
 
-1. Move everything inside `src` except the `angular` and `angularjs` folders created in the prior step into the `angular` folder.
+   > Verify the angularjs directory is not inside the angular directory.
 
-1. Copy two three files from `src\angular\app` back out into `src`.
+1. Move everything (all directories and files) inside `src` except the `angular` and `angularjs` folders created in the prior step into the `angular` folder.
+
+1. Copy two files from `src\angular\app` back out into `src`.
    - favicon.ico
    - index.html
-1. Copy the `upgrading\tsconfig.json` into the `upgrading\src` directory
+1. Modify the `tsconfig` files to recognize the new directory structure.
+
+   #### `tsconfig.app.json`
+
+   ```diff
+   {
+     "extends": "./tsconfig.json",
+     "compilerOptions": {
+       "outDir": "./out-tsc/app",
+       "types": []
+     },
+     "files": [
+   -   "src/main.ts",
+   +   "src/angular/main.ts",
+   -   "src/polyfills.ts"
+   +   "src/angular/polyfills.ts"
+     ],
+     "files": [
+       "src/angular/main.ts",
+       "src/angular/polyfills.ts"
+     ],
+     "include": [
+       "src/**/*.d.ts"
+     ]
+   }
+   ```
+
+   #### `tsconfig.spec.json`
+
+   ```diff
+   {
+     "extends": "./tsconfig.json",
+     "compilerOptions": {
+       "outDir": "./out-tsc/spec",
+       "types": [
+         "jasmine"
+       ]
+     },
+     "files": [
+   -    "src/test.ts",
+   +    "src/angular/test.ts",
+   -    "src/polyfills.ts"
+   +    "src/angular/polyfills.ts"
+     ],
+     "include": [
+       "src/**/*.spec.ts",
+       "src/**/*.d.ts"
+     ]
+   }
+
+   ```
+
+1. Modify `angular.json` to recognize the new directory structure.
+
+   In most cases, you would need to replace `src/` with `src/angular/`. Then go back and set the paths for index.html, favicon.ico to remove the /angular part of the path since these items are still directly inside of the root `src` directory.
+
+   If time is tight just replace the contents of the `angular.json` file with the following.
+
+   #### `angular.json`
+
+   ```json
+   {
+     "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+     "version": 1,
+     "newProjectRoot": "projects",
+     "projects": {
+       "upgrading": {
+         "projectType": "application",
+         "schematics": {},
+         "root": "",
+         "sourceRoot": "src",
+         "prefix": "app",
+         "architect": {
+           "build": {
+             "builder": "@angular-devkit/build-angular:browser",
+             "options": {
+               "outputPath": "dist/upgrading",
+               "index": "src/index.html",
+               "main": "src/angular/main.ts",
+               "polyfills": "src/angular/polyfills.ts",
+               "tsConfig": "tsconfig.app.json",
+               "aot": true,
+               "assets": ["src/favicon.ico", "src/angular/assets"],
+               "styles": ["src/angular/styles.css"],
+               "scripts": []
+             },
+             "configurations": {
+               "production": {
+                 "fileReplacements": [
+                   {
+                     "replace": "src/angular/environments/environment.ts",
+                     "with": "src/angular/environments/environment.prod.ts"
+                   }
+                 ],
+                 "optimization": true,
+                 "outputHashing": "all",
+                 "sourceMap": false,
+                 "namedChunks": false,
+                 "extractLicenses": true,
+                 "vendorChunk": false,
+                 "buildOptimizer": true,
+                 "budgets": [
+                   {
+                     "type": "initial",
+                     "maximumWarning": "2mb",
+                     "maximumError": "5mb"
+                   },
+                   {
+                     "type": "anyComponentStyle",
+                     "maximumWarning": "6kb",
+                     "maximumError": "10kb"
+                   }
+                 ]
+               }
+             }
+           },
+           "serve": {
+             "builder": "@angular-devkit/build-angular:dev-server",
+             "options": {
+               "browserTarget": "upgrading:build"
+             },
+             "configurations": {
+               "production": {
+                 "browserTarget": "upgrading:build:production"
+               }
+             }
+           },
+           "extract-i18n": {
+             "builder": "@angular-devkit/build-angular:extract-i18n",
+             "options": {
+               "browserTarget": "upgrading:build"
+             }
+           },
+           "test": {
+             "builder": "@angular-devkit/build-angular:karma",
+             "options": {
+               "main": "src/angular/test.ts",
+               "polyfills": "src/angular/polyfills.ts",
+               "tsConfig": "tsconfig.spec.json",
+               "karmaConfig": "karma.conf.js",
+               "assets": ["src/angular/favicon.ico", "src/angular/assets"],
+               "styles": ["src/angular/styles.css"],
+               "scripts": []
+             }
+           },
+           "lint": {
+             "builder": "@angular-devkit/build-angular:tslint",
+             "options": {
+               "tsConfig": [
+                 "tsconfig.app.json",
+                 "tsconfig.spec.json",
+                 "e2e/tsconfig.json"
+               ],
+               "exclude": ["**/node_modules/**"]
+             }
+           },
+           "e2e": {
+             "builder": "@angular-devkit/build-angular:protractor",
+             "options": {
+               "protractorConfig": "e2e/protractor.conf.js",
+               "devServerTarget": "upgrading:serve"
+             },
+             "configurations": {
+               "production": {
+                 "devServerTarget": "upgrading:serve:production"
+               }
+             }
+           }
+         }
+       }
+     },
+     "defaultProject": "upgrading"
+   }
+   ```
+
+1. In the command-promt or terminal, change directory to the `working\upgrading` directory.
+   ```
+   cd upgrading
+   ```
+1. Serve the Angular CLI project to verify it is still working
+
+   ```bash
+   ng serve -o
+   ```
+
+   A browser should display the `angular-cli` generated application as it did in the previous lab.
+
+1. Shut down the web server `Ctrl+C`.
 
 1. Optional: Commit your code to source control.
 
-## Lab 3: Copy AngularJS project
+## Lab 3: Create AngularJS directory and configure
 
 > Note that there is already a `bower_components` folder in `angular-phonecat\app` repository we cloned. If you were to download your own copy of angular-phonecat you would need to first run `npm install` to create this folder.
 
-1.  Copy the contents of `angular-phonecat\app` (including the bower_components subdirectory) into `upgrading\src\angularjs`.
+1.  Copy **the contents** of `angular-phonecat\app` (including the bower_components subdirectory) into `upgrading\src\angularjs`.
 1.  Merge `upgrading\src\angularjs\index.html` into `upgrading\src\index.html` as shown below:
 
     ```diff
@@ -166,7 +356,7 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
               "builder": "@angular-devkit/build-angular:browser",
               "options": {
                 "aot": true,
-                "outputPath": "dist/a72-upgrading",
+                "outputPath": "dist/upgrading",
                 "index": "src/index.html",
                 "main": "src/angular/main.ts",
                 "polyfills": "src/angular/polyfills.ts",
@@ -182,142 +372,7 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
     ...
     ```
 
-1.  Modify `angular.json` to recognize the new directory structure.
-
-    In most cases, you would need to replace `src/` with `src/angular/`. Then go back and set the paths for index.html, favicon.ico to remove the /angular part of the path since these items are still directly inside of the root `src` directory.
-
-    To save time just replace the contents of the angular.json file with the following.
-
-    > Note, this file includes the adding of the angularjs directory to the assets in the last step so there is no need to repeat that step.
-
-    ### Updated `angular.json`
-
-    ```json
-    {
-      "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-      "version": 1,
-      "newProjectRoot": "projects",
-      "projects": {
-        "a72-upgrading": {
-          "root": "",
-          "sourceRoot": "src",
-          "projectType": "application",
-          "prefix": "app",
-          "schematics": {},
-          "architect": {
-            "build": {
-              "builder": "@angular-devkit/build-angular:browser",
-              "options": {
-                "aot": true,
-                "outputPath": "dist/a72-upgrading",
-                "index": "src/index.html",
-                "main": "src/angular/main.ts",
-                "polyfills": "src/angular/polyfills.ts",
-                "tsConfig": "src/angular/tsconfig.app.json",
-                "assets": [
-                  "src/favicon.ico",
-                  "src/angular/assets",
-                  "src/angularjs"
-                ],
-                "styles": ["src/angular/styles.css"],
-                "scripts": []
-              },
-              "configurations": {
-                "production": {
-                  "budgets": [
-                    {
-                      "type": "anyComponentStyle",
-                      "maximumWarning": "6kb"
-                    }
-                  ],
-                  "fileReplacements": [
-                    {
-                      "replace": "src/angular/environments/environment.ts",
-                      "with": "src/angular/environments/environment.prod.ts"
-                    }
-                  ],
-                  "optimization": true,
-                  "outputHashing": "all",
-                  "namedChunks": false,
-                  "aot": true,
-                  "extractLicenses": true,
-                  "vendorChunk": false,
-                  "buildOptimizer": true
-                }
-              }
-            },
-            "serve": {
-              "builder": "@angular-devkit/build-angular:dev-server",
-              "options": {
-                "browserTarget": "a72-upgrading:build"
-              },
-              "configurations": {
-                "production": {
-                  "browserTarget": "a72-upgrading:build:production"
-                }
-              }
-            },
-            "extract-i18n": {
-              "builder": "@angular-devkit/build-angular:extract-i18n",
-              "options": {
-                "browserTarget": "a72-upgrading:build"
-              }
-            },
-            "test": {
-              "builder": "@angular-devkit/build-angular:karma",
-              "options": {
-                "main": "src/angular/test.ts",
-                "polyfills": "src/angular/polyfills.ts",
-                "tsConfig": "src/angular/tsconfig.spec.json",
-                "karmaConfig": "src/angular/karma.conf.js",
-                "styles": ["src/angular/styles.css"],
-                "scripts": [],
-                "assets": ["src/angular/favicon.ico", "src/angular/assets"]
-              }
-            },
-            "lint": {
-              "builder": "@angular-devkit/build-angular:tslint",
-              "options": {
-                "tsConfig": [
-                  "src/angular/tsconfig.app.json",
-                  "src/angular/tsconfig.spec.json"
-                ],
-                "exclude": ["**/node_modules/**"]
-              }
-            }
-          }
-        },
-        "a72-upgrading-e2e": {
-          "root": "e2e/",
-          "projectType": "application",
-          "architect": {
-            "e2e": {
-              "builder": "@angular-devkit/build-angular:protractor",
-              "options": {
-                "protractorConfig": "e2e/protractor.conf.js",
-                "devServerTarget": "a72-upgrading:serve"
-              },
-              "configurations": {
-                "production": {
-                  "devServerTarget": "a72-upgrading:serve:production"
-                }
-              }
-            },
-            "lint": {
-              "builder": "@angular-devkit/build-angular:tslint",
-              "options": {
-                "tsConfig": "e2e/tsconfig.e2e.json",
-                "exclude": ["**/node_modules/**"]
-              }
-            }
-          }
-        }
-      },
-      "defaultProject": "a72-upgrading"
-    }
-    ```
-
-1.  Fix Paths throughout the application by appending `angularjs/` to the paths in these files in the `src\angularjs` directory.
+1.  Fix paths throughout the application by appending `angularjs/` to the paths in these files in the `src\angularjs` directory.
 
     - `core\phone\phone.service.js`
       - change ~~`"phones/:phoneId.json",`~~ to `"angularjs/phones/:phoneId.json",`
