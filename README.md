@@ -85,6 +85,8 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
 
    A browser should display the `angular-cli` generated application.
 
+1. Shut down the web server Ctrl+C.   
+
 1. Optional: Initialize a git repository and commit this initial code so you can track your progress.
 
 ## Lab 2: Create Angular and AngularJS folders
