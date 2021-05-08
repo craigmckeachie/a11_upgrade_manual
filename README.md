@@ -6,9 +6,9 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
   - [Lab 0: The AngularJS Project](#lab-0-the-angularjs-project)
   - [Lab 1: Generate New Angular Project](#lab-1-generate-new-angular-project)
   - [Lab 2: Create Angular directory and configure](#lab-2-create-angular-directory-and-configure)
-    - [`tsconfig.app.json`](#tsconfigappjson)
-    - [`tsconfig.spec.json`](#tsconfigspecjson)
-    - [`angular.json`](#angularjson)
+      - [`tsconfig.app.json`](#tsconfigappjson)
+      - [`tsconfig.spec.json`](#tsconfigspecjson)
+      - [`angular.json`](#angularjson)
   - [Lab 3: Create AngularJS directory and configure](#lab-3-create-angularjs-directory-and-configure)
   - [Lab 4: Bootstrap AngularJS & Angular Hybrid Application](#lab-4-bootstrap-angularjs--angular-hybrid-application)
   - [Lab 5: Downgrading An Angular Component](#lab-5-downgrading-an-angular-component)
@@ -557,6 +557,7 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
     ```html
     ...
     </select>
+    </p>
 
     <p>
             <!-- Angular Component -->
@@ -564,8 +565,7 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
     </p>
     ```
 
-6.  Stop and restart `ng serve -o`.
-7.  Open the application in the browser and you should see the _Angular_ widget hosted inside the _AngularJS_ component as shown below. Note that the orange box will not actually show on the page it is just there in the screenshot to show where the widget renders.
+6.  Open the application in the browser and you should see the _Angular_ widget hosted inside the _AngularJS_ component as shown below. Note that the orange box will not actually show on the page it is just there in the screenshot to show where the widget renders.
 
     > Note the orange box is just there to highlight what you are looking for and will not appear in your application.
 
@@ -573,7 +573,9 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
 
     [widget]: readme-assets/widget.png
 
-8.  Optional: Commit your code to source control.
+    > You may need to stop and restart `ng serve -o` if the component isn't showing or you get an error.
+
+7.  Optional: Commit your code to source control.
 
 ## Lab 6: Upgrading an AngularJS Service
 
@@ -739,10 +741,10 @@ Making the AngularJS Router activate Angular components is quite easy.
     export class AppModule {}
     ```
 
-4.  Remove the following code from AppModule
+4.  Remove the following code from AppModule:
 
-    - inject `upgradeModule`
-    - bootstrap application manually
+    - Remove: injecting `upgradeModule` in the constructor
+    - Remove: bootstrapping the application manually
 
     #### `src\angular\app\app.module.ts`
 
@@ -809,7 +811,7 @@ Making the AngularJS Router activate Angular components is quite easy.
     #### `src\angular\app\app.module.ts`
 
     ```diff
-    + import { WidgetComponent } from "./widget/widget.component";
+     import { WidgetComponent } from "./widget/widget.component";
     + import { RouterModule } from "@angular/router";
 
     angular.module('phonecatApp')
