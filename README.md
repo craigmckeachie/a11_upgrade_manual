@@ -422,7 +422,7 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
 
 ## Lab 4: Bootstrap AngularJS & Angular Hybrid Application
 
-    1.  To bootstrap one application with both AngularJS and Angular we can leverage `ngUpgrade` which is part of Angular:
+1.  To bootstrap one application with both AngularJS and Angular we can leverage `ngUpgrade` which is part of Angular:
 
     Open another command-prompt or terminal to the `upgrading` directory and run this command.
 
