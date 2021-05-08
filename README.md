@@ -44,7 +44,6 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
 
    ```bash
    npm install serve -g
-   serve .
    ```
 
    > Note: If you already installed the `serve` web server in an earlier lab you can skip this step.
