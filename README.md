@@ -100,7 +100,7 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
 
 1. Move everything (all directories and files) inside `src` except the `angular` and `angularjs` folders created in the prior step into the `angular` folder.
 
-1. Copy two files from `src\angular\app` back out into `src`.
+1. Copy two files from `src\angular\` back out into `src`.
    - favicon.ico
    - index.html
 1. Modify the `tsconfig` files to recognize the new directory structure.
@@ -506,10 +506,10 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
     #### `src\angular\app\widget\widget.component.ts`
 
     ```ts
-    import { Component } from "@angular/core";
+    import { Component } from '@angular/core';
     @Component({
-      selector: "app-widget",
-      template: ` <h3>Angular Widget</h3> `
+      selector: 'app-widget',
+      template: ` <h3>Angular Widget</h3> `,
     })
     export class WidgetComponent {}
     ```
@@ -519,14 +519,14 @@ This tutorial walks you through upgrading the `Phonecat` app written in AngularJ
     #### `src\app\angular\app.module.ts`
 
     ```ts
-    import { UpgradeModule, downgradeComponent } from "@angular/upgrade/static";
-    import { WidgetComponent } from "./widget/widget.component";
+    import { UpgradeModule, downgradeComponent } from '@angular/upgrade/static';
+    import { WidgetComponent } from './widget/widget.component';
 
     declare var angular: any;
     angular
-      .module("phonecatApp")
+      .module('phonecatApp')
       .directive(
-        "appWidget",
+        'appWidget',
         downgradeComponent({ component: WidgetComponent })
       );
     ```
@@ -586,18 +586,18 @@ In order to use an existing AngularJS service within a new Angular Component, we
     #### `src\angular\app\phones\shared\phone.service.ts`
 
     ```ts
-    import { InjectionToken } from "@angular/core";
+    import { InjectionToken } from '@angular/core';
 
-    export const PHONE_SERVICE = new InjectionToken<any>("PHONE_SERVICE");
+    export const PHONE_SERVICE = new InjectionToken<any>('PHONE_SERVICE');
 
     function createPhoneService(injector) {
-      return injector.get("Phone");
+      return injector.get('Phone');
     }
 
     export const phoneServiceProvider = {
       provide: PHONE_SERVICE,
       useFactory: createPhoneService,
-      deps: ["$injector"]
+      deps: ['$injector'],
     };
     ```
 
@@ -629,14 +629,14 @@ In order to use an existing AngularJS service within a new Angular Component, we
     #### `src\angular\app\widget\widget.component.ts`
 
     ```ts
-    import { Component, Inject, OnInit } from "@angular/core";
-    import { PHONE_SERVICE } from "../phones/shared/phone.service";
+    import { Component, Inject, OnInit } from '@angular/core';
+    import { PHONE_SERVICE } from '../phones/shared/phone.service';
     @Component({
-      selector: "app-widget",
+      selector: 'app-widget',
       template: `
         <h3>Angular Widget</h3>
         <p>{{ phones.length }} phones found.</p>
-      `
+      `,
     })
     export class WidgetComponent implements OnInit {
       phones: any[] = [];
@@ -762,19 +762,19 @@ Making the AngularJS Router activate Angular components is quite easy.
     #### `src\angular\app\app.component.ts`
 
     ```ts
-    import { Component, OnInit } from "@angular/core";
-    import { UpgradeModule } from "@angular/upgrade/static";
+    import { Component, OnInit } from '@angular/core';
+    import { UpgradeModule } from '@angular/upgrade/static';
 
     @Component({
-      selector: "app-root",
-      templateUrl: "./app.component.html",
-      styleUrls: ["./app.component.css"]
+      selector: 'app-root',
+      templateUrl: './app.component.html',
+      styleUrls: ['./app.component.css'],
     })
     export class AppComponent implements OnInit {
       constructor(private upgrade: UpgradeModule) {}
 
       ngOnInit(): void {
-        this.upgrade.bootstrap(document.body, ["phonecatApp"]);
+        this.upgrade.bootstrap(document.body, ['phonecatApp']);
       }
     }
     ```
@@ -884,25 +884,25 @@ Making the AngularJS Router activate Angular components is quite easy.
     #### `src\angularjs\app.config.js`
 
     ```ts
-    angular.module("phonecatApp").config([
-      "$locationProvider",
-      "$routeProvider",
+    angular.module('phonecatApp').config([
+      '$locationProvider',
+      '$routeProvider',
       function config($locationProvider, $routeProvider) {
         //$locationProvider.hashPrefix("!");
 
         $routeProvider
-          .when("/phones", {
-            template: "<phone-list></phone-list>"
+          .when('/phones', {
+            template: '<phone-list></phone-list>',
           })
-          .when("/phones/:phoneId", {
-            template: "<phone-detail></phone-detail>"
+          .when('/phones/:phoneId', {
+            template: '<phone-detail></phone-detail>',
           })
           // .when("/widget", {
           //   template: "<app-widget></app-widget>"
           // })
           //.otherwise("/phones");
-          .otherwise({ template: "" });
-      }
+          .otherwise({ template: '' });
+      },
     ]);
     ```
 
